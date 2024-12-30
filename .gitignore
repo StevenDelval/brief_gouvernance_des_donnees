@@ -220,3 +220,4 @@ terraform.rc
 *.log
 
 mocks/
+previews/
