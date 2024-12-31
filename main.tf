@@ -14,7 +14,7 @@ resource "azurerm_storage_account" "data_lake" {
 }
 
 resource "azurerm_storage_data_lake_gen2_filesystem" "dl_filesystem_region" {
-  for_each          = toset(var.folders)
+  for_each           = toset(var.folders)
   name               = each.value
   storage_account_id = azurerm_storage_account.data_lake.id
 }
@@ -40,7 +40,7 @@ resource "azurerm_storage_container" "blob_storage_container" {
 resource "azurerm_purview_account" "purview_account" {
   name                = var.purview_account_name
   resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  location            = "northeurope"
 
   identity {
     type = "SystemAssigned"
