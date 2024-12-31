@@ -25,27 +25,28 @@ def get_service_client(account_name, account_key):
     )
     return service_client
 
-# Initialize the Data Lake service client
+# Initialize the Blob service client
 service_client = get_service_client(BLOB_STORAGE_NAME, BLOB_STORAGE_KEY)
 
 # Define the local root folder containing files to upload
 local_root_folder_path = "mocks/blob_storage/students"
-for elt in service_client.list_containers():
-     print(elt)
 
+# Get the container client for the target container
 container_client = service_client.get_container_client("students")
+
+# Iterate through each file in the local root folder
 for file in os.listdir(local_root_folder_path):
     local_file_path = os.path.join(local_root_folder_path, file)
+
     if not os.path.isfile(local_file_path):
-            # Skip if the path is not a file
-            continue
+        # Skip if the path is not a file
+        continue
 
     print(f"Uploading file: {local_file_path}")
 
-    # Get the file client for the current file
+    # Get the blob client for the current file
     blob_client = container_client.get_blob_client(file)
 
-    # Read and upload the file contents
+    # Upload the file contents 
     with open(local_file_path, "rb") as file_data:
-        file_contents = file_data.read()
-        blob_client.upload_blob(file_contents, overwrite=True)
+        blob_client.upload_blob(file_data, overwrite=True)
